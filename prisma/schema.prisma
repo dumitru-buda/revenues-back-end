@@ -1,0 +1,37 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Movie {
+  id           String        @id @default(uuid())
+  title        String
+  created_at   DateTime      @default(now())
+  shareholders Shareholder[]
+  transfers    Transfer[]
+}
+
+model Shareholder {
+  id         String   @id @default(uuid())
+  first_name String
+  last_name  String
+  address    String
+  iban       String
+  created_at DateTime @default(now())
+  movie_id   String
+  movie      Movie    @relation(fields: [movie_id], references: [id])
+}
+
+model Transfer {
+  id          String   @id @default(uuid())
+  amount      Int
+  description String
+  currency    String   @default("EUR")
+  created_at  DateTime @default(now())
+  movie_id    String
+  movie       Movie    @relation(fields: [movie_id], references: [id])
+}
