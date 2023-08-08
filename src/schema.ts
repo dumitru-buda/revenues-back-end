@@ -88,6 +88,7 @@ export const resolvers = {
     ) => {
       return context.prisma.shareholder.findMany({
         take: args.page_size,
+        skip: !!args.cursor ? 1 : 0,
         cursor: args.cursor ? { id: args.cursor } : undefined,
         orderBy: { id: 'asc' },
       })
